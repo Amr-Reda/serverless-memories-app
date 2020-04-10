@@ -1,0 +1,26 @@
+{
+    "$schema" : "http://json-schema.org/draft-04/schema#",
+    "title": "create-memory",
+    "type":"object",
+    "properties": {
+        "name":{
+            "type":"string"
+        },
+        "day":{
+            "type":"number"
+        },
+        "month":{
+            "type":"number"
+        },
+        "year":{
+            "type":"number"
+        }
+    },
+    "required":[
+        "name",
+        "day",
+        "month",
+        "year"
+    ],
+    "additionalProperties": false
+}
