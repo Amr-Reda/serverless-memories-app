@@ -8,14 +8,15 @@ export class MemoriesAccess {
         private readonly indexName = process.env.INDEX_NAME) {
     }
 
-    async getMemories(userId: string) {
+    async getMemories(userId: string, mday: string) {
         
         const result = await this.docClient.query({
           TableName: this.memoriesTable,
           IndexName: this.indexName,
-          KeyConditionExpression: 'userId = :userId',
+          KeyConditionExpression: 'userId = :userId AND mday = :mday',
           ExpressionAttributeValues: {
               ':userId': userId,
+              ':mday': mday,
           },
         }).promise()
       

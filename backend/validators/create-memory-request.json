@@ -6,11 +6,8 @@
         "name":{
             "type":"string"
         },
-        "day":{
-            "type":"number"
-        },
-        "month":{
-            "type":"number"
+        "mday":{
+            "type":"string"
         },
         "year":{
             "type":"number"
@@ -18,8 +15,7 @@
     },
     "required":[
         "name",
-        "day",
-        "month",
+        "mday",
         "year"
     ],
     "additionalProperties": false

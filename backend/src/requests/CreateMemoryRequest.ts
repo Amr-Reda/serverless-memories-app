@@ -3,7 +3,6 @@
  */
 export interface CreateMemoryRequest {
   name: string
-  day: number
-  month: number
+  mday: string
   year: number
 }

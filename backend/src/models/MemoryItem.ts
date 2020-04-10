@@ -2,8 +2,7 @@ export interface MemoryItem {
   userId: string
   memoryId: string
   name: string
-  day: number
-  month: number
+  mday: string
   year: number
   attachmentUrl?: string
 }

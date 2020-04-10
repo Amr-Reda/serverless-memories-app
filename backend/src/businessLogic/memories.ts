@@ -9,10 +9,13 @@ const memoriesAccess = new MemoriesAccess()
 
 export async function getMemories(event: APIGatewayProxyEvent) {
     let userId = event.requestContext.authorizer['principalId'];
-
+    let {day, month} = event.queryStringParameters
+    let memoryDay = `${day}/${month}`
     console.log('userId ', userId);
+    console.log('day ', day);
+    console.log('month ', month);
     
-    return await memoriesAccess.getMemories(userId)
+    return await memoriesAccess.getMemories(userId, memoryDay)
 }
 
 export async function createMemory(event: APIGatewayProxyEvent) {

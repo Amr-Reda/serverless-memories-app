@@ -17,8 +17,8 @@ provider:
 
   environment:
     AUTH_0_SECRET: EtKsodXh9oKqfLZnQe5TgkvuwQ6hBKNRsUSq8-PMdwNNGch8V938QpBjIjY_vC-d
-    MEMORIES_TABLE: memories-${self:provider.stage}
-    IMAGES_S3_BUCKET: memories-${self:provider.stage}
+    MEMORIES_TABLE: memories-887654-${self:provider.stage}
+    IMAGES_S3_BUCKET: memories-154379-${self:provider.stage}
     INDEX_NAME: userId
 
 custom:
@@ -41,7 +41,7 @@ functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
-  GetMemoriess:
+  GetMemories:
     handler: src/lambda/http/getMemories.handler
     events:
       - http:
@@ -111,20 +111,20 @@ functions:
           - dynamodb:GetItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.MEMORIES_TABLE}
 
-  GenerateUploadUrl:
-    handler: src/lambda/http/generateUploadUrl.handler
-    events:
-      - http:
-          method: post
-          path: memories/{memoryId}/attachment
-          authorizer: Auth
-          cors: true
-    iamRoleStatements:
-      - Effect: Allow
-        Action:
-          - s3:PutObject
-          - s3:GetObject
-        Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
+  # GenerateUploadUrl:
+  #   handler: src/lambda/http/generateUploadUrl.handler
+  #   events:
+  #     - http:
+  #         method: post
+  #         path: memories/{memoryId}/attachment
+  #         authorizer: Auth
+  #         cors: true
+  #   iamRoleStatements:
+  #     - Effect: Allow
+  #       Action:
+  #         - s3:PutObject
+  #         - s3:GetObject
+  #       Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
 
 resources:
   Resources:
@@ -150,13 +150,15 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
-          - AttributeName: memoryId
-            AttributeType: S
           - AttributeName: userId
             AttributeType: S
+          - AttributeName: mday
+            AttributeType: S
         KeySchema:
-          - AttributeName: memoryId
+          - AttributeName: userId
             KeyType: HASH
+          - AttributeName: mday
+            KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.MEMORIES_TABLE}
         GlobalSecondaryIndexes:
@@ -164,6 +166,8 @@ resources:
             KeySchema:
               - AttributeName: userId
                 KeyType: HASH
+              - AttributeName: mday
+                KeyType: RANGE
             Projection:
               ProjectionType: ALL # What attributes will be copied to an index
     MemoryBucket:
@@ -187,10 +191,10 @@ resources:
       Type: AWS::S3::BucketPolicy
       Properties:
         PolicyDocument:
-          Id: Policy1585874178818
+          Id: Policy1586536681550
           Version: "2012-10-17"
           Statement:
-            - Sid: Stmt1585874171709
+            - Sid: Stmt1586536668430
               Effect: Allow
               Principal: '*'
               Action: 's3:GetObject'

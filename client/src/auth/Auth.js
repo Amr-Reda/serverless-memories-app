@@ -99,7 +99,7 @@ export default class Auth {
     // Check whether the current time is past the
     // access token's expiry time
     let expiresAt = this.expiresAt;
-    return true
+    // return true
     return new Date().getTime() < expiresAt;
   }
 }
