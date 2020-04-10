@@ -17,7 +17,7 @@ provider:
 
   environment:
     AUTH_0_SECRET: EtKsodXh9oKqfLZnQe5TgkvuwQ6hBKNRsUSq8-PMdwNNGch8V938QpBjIjY_vC-d
-    MEMORIES_TABLE: memories-887654-${self:provider.stage}
+    MEMORIES_TABLE: memories-887655-${self:provider.stage}
     IMAGES_S3_BUCKET: memories-154379-${self:provider.stage}
     INDEX_NAME: userId
 
@@ -154,11 +154,13 @@ resources:
             AttributeType: S
           - AttributeName: mday
             AttributeType: S
+          - AttributeName: memoryId
+            AttributeType: S
         KeySchema:
-          - AttributeName: userId
+          - AttributeName: memoryId
             KeyType: HASH
-          - AttributeName: mday
-            KeyType: RANGE
+          # - AttributeName: mday
+          #   KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.MEMORIES_TABLE}
         GlobalSecondaryIndexes:

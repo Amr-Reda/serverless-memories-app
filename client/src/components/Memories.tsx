@@ -107,9 +107,6 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
   onChange = async (date: any) => {
     this.setState({ date, loadingMemories: true })
     try {
-      console.log('====================================');
-      console.log(date.getDate(), date.getMonth()+1);
-      console.log('====================================');
       const memories = await getMemories(this.props.auth.getIdToken(), date.getDate(), date.getMonth()+1)
       this.setState({
         memories,
@@ -156,6 +153,7 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
               content: 'New memory',
               onClick: this.onMemoryCreate
             }}
+            value={this.state.newMemoryName}
             fluid
             placeholder="Memory Name"
             onChange={this.handleNameChange}
