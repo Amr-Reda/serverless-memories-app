@@ -4,10 +4,10 @@ import { CreateMemoryRequest } from '../types/CreateMemoryRequest';
 import Axios from 'axios'
 import { UpdateMemoryRequest } from '../types/UpdateMemoryRequest';
 
-export async function getMemories(idToken: string): Promise<Memory[]> {
+export async function getMemories(idToken: string, day: number, month: number): Promise<Memory[]> {
   console.log('Fetching memories')
 
-  const response = await Axios.get(`${apiEndpoint}/memories`, {
+  const response = await Axios.get(`${apiEndpoint}/memories?day=${day}&month=${month}`, {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`

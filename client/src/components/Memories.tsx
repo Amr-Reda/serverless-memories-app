@@ -53,8 +53,7 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
     try {
       const newMemory = await createMemory(this.props.auth.getIdToken(), {
         name: this.state.newMemoryName,
-        day: this.state.date.getDate(),
-        month: this.state.date.getMonth()+1,
+        mday: `${this.state.date.getDate()}/${this.state.date.getMonth()+1}`,
         year: this.state.date.getFullYear(),
       })
       this.setState({
@@ -95,7 +94,7 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
 
   async componentDidMount() {
     try {
-      const memories = await getMemories(this.props.auth.getIdToken())
+      const memories = await getMemories(this.props.auth.getIdToken(), this.state.date.getDate(), this.state.date.getMonth()+1)
       this.setState({
         memories,
         loadingMemories: false
@@ -106,7 +105,19 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
   }
 
   onChange = async (date: any) => {
-    this.setState({ date })
+    this.setState({ date, loadingMemories: true })
+    try {
+      console.log('====================================');
+      console.log(date.getDate(), date.getMonth()+1);
+      console.log('====================================');
+      const memories = await getMemories(this.props.auth.getIdToken(), date.getDate(), date.getMonth()+1)
+      this.setState({
+        memories,
+        loadingMemories: false
+      })
+    } catch (e) {
+      alert(`Failed to fetch memories: ${e.message}`)
+    }
     return
   }
 

@@ -1,8 +1,7 @@
 export interface Memory {
     memoryId: string
     name: string, 
-    day: number,
-    month: number,
+    mday: string,
     year: number,
     attachmentUrl?: string
 }  
