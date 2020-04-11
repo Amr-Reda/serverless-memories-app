@@ -82,7 +82,7 @@ export class EditMemory extends React.PureComponent<
   onMemoryUpdate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
     try {
       await patchMemory(this.props.auth.getIdToken(), this.props.match.params.memoryId, {
-        name: event.target.value
+        name: this.state.name
       })
       alert('Memory updated!')
     } catch {

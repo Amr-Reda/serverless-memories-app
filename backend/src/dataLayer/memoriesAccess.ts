@@ -50,16 +50,12 @@ export class MemoriesAccess {
           .update({
             TableName: this.memoriesTable,
             Key: { memoryId },
-            UpdateExpression: 'set #name = :n, #dueDate = :due, #done = :d',
+            UpdateExpression: 'set #name = :n',
             ExpressionAttributeValues: {
-                ':n': updatedMemory.name,
-                ':due': updatedMemory.dueDate,
-                ':d': updatedMemory.done
+                ':n': updatedMemory.name
             },
             ExpressionAttributeNames: {
-              '#name': 'name',
-              '#dueDate': 'dueDate',
-              '#done': 'done'
+              '#name': 'name'
             }
           })
           .promise()
