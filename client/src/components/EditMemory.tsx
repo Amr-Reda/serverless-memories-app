@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { Form, Button } from 'semantic-ui-react'
+import { Form, Button, Input, Grid, Divider } from 'semantic-ui-react'
 import Auth from '../auth/Auth'
-import { getUploadUrl, uploadFile } from '../api/memories-api'
+import { getUploadUrl, uploadFile, patchMemory } from '../api/memories-api'
 
 enum UploadState {
   NoUpload,
@@ -15,10 +15,18 @@ interface EditMemoryProps {
       memoryId: string
     }
   }
+  history: {
+    location: {
+      state: {
+        memory: any
+      }
+    }
+  }
   auth: Auth
 }
 
 interface EditMemoryState {
+  name: string
   file: any
   uploadState: UploadState
 }
@@ -28,6 +36,7 @@ export class EditMemory extends React.PureComponent<
   EditMemoryState
 > {
   state: EditMemoryState = {
+    name: this.props.history.location.state.memory.name,
     file: undefined,
     uploadState: UploadState.NoUpload
   }
@@ -70,9 +79,42 @@ export class EditMemory extends React.PureComponent<
     })
   }
 
+  onMemoryUpdate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
+    try {
+      await patchMemory(this.props.auth.getIdToken(), this.props.match.params.memoryId, {
+        name: event.target.value
+      })
+      alert('Memory updated!')
+    } catch {
+      alert('Memory update failed')
+    }
+  }
+
+  handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ name: event.target.value })
+  }
+
   render() {
     return (
       <div>
+        <Grid.Row>
+          <Grid.Column width={16}>
+            <Input
+                action={{
+                  color: 'teal',
+                  content: 'Update',
+                  onClick: this.onMemoryUpdate
+                }}
+                value={this.state.name}
+                onChange={this.handleNameChange}
+                fluid
+                placeholder="Memory Name"
+              />
+          </Grid.Column>
+        <Grid.Column width={16}>
+          <Divider />
+        </Grid.Column>
+      </Grid.Row>
         <h1>Upload new image</h1>
 
         <Form onSubmit={this.handleSubmit}>

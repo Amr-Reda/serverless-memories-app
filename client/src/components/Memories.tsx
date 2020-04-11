@@ -16,7 +16,7 @@ import {
   Loader
 } from 'semantic-ui-react'
 
-import { createMemory, deleteMemory, getMemories, patchMemory } from '../api/memories-api'
+import { createMemory, deleteMemory, getMemories } from '../api/memories-api'
 import Auth from '../auth/Auth'
 import { Memory } from '../types/Memory'
 
@@ -44,8 +44,8 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
     this.setState({ newMemoryName: event.target.value })
   }
 
-  onEditButtonClick = (memoryId: string) => {
-    this.props.history.push(`/memories/${memoryId}/edit`)
+  onEditButtonClick = (memory: any) => {
+    this.props.history.push(`/memories/${memory.memoryId}/edit`, {memory})
   }
 
   onMemoryCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
@@ -205,7 +205,7 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
                 <Button
                   icon
                   color="blue"
-                  onClick={() => this.onEditButtonClick(memory.memoryId)}
+                  onClick={() => this.onEditButtonClick(memory)}
                 >
                   <Icon name="pencil" />
                 </Button>
