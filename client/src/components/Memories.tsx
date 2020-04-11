@@ -44,6 +44,10 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
     this.setState({ newMemoryName: event.target.value })
   }
 
+  handleImgErr = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.currentTarget.remove()
+  }
+
   onEditButtonClick = (memory: any) => {
     this.props.history.push(`/memories/${memory.memoryId}/edit`, {memory})
   }
@@ -220,7 +224,7 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
                 </Button>
               </Grid.Column>
               {memory.attachmentUrl && (
-                  <Image src={memory.attachmentUrl} size="small" wrapped />
+                  <Image src={memory.attachmentUrl} onError={this.handleImgErr} size="small" wrapped />
               )}
               <Grid.Column width={16}>
                 <Divider />
