@@ -30,7 +30,6 @@ interface MemoriesState {
   newMemoryName: string
   date: Date
   loadingMemories: boolean
-  imageError: boolean
 }
 
 export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> {
@@ -38,8 +37,7 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
     memories: [],
     newMemoryName: '',
     date: new Date(),
-    loadingMemories: true,
-    imageError: false
+    loadingMemories: true
   }
 
   handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -185,12 +183,6 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
     )
   }
 
-  fallback() {
-    this.setState({
-      imageError: true
-    })
-  }
-
   renderMemoriesList() {
     return (
       <Grid padded>
@@ -227,11 +219,9 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
                   <Icon name="delete" />
                 </Button>
               </Grid.Column>
-              {this.state.imageError ? false:
-                memory.attachmentUrl && (
-                  <Image src={memory.attachmentUrl} onError={this.fallback()} size="small" wrapped />
-                ) && this.setState({imageError: false})
-              }
+              {memory.attachmentUrl && (
+                  <Image src={memory.attachmentUrl} size="small" wrapped />
+              )}
               <Grid.Column width={16}>
                 <Divider />
               </Grid.Column>

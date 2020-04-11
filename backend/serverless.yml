@@ -1,5 +1,5 @@
 service:
-  name: serverless-memories-app
+  name: memories-app
 
 plugins:
   - serverless-webpack
@@ -17,8 +17,8 @@ provider:
 
   environment:
     AUTH_0_SECRET: EtKsodXh9oKqfLZnQe5TgkvuwQ6hBKNRsUSq8-PMdwNNGch8V938QpBjIjY_vC-d
-    MEMORIES_TABLE: memories-887655-${self:provider.stage}
-    IMAGES_S3_BUCKET: memories-154379-${self:provider.stage}
+    MEMORIES_TABLE: memories-887656-${self:provider.stage}
+    IMAGES_S3_BUCKET: memories-154370-${self:provider.stage}
     INDEX_NAME: userId
 
 custom:
@@ -111,20 +111,20 @@ functions:
           - dynamodb:GetItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.MEMORIES_TABLE}
 
-  # GenerateUploadUrl:
-  #   handler: src/lambda/http/generateUploadUrl.handler
-  #   events:
-  #     - http:
-  #         method: post
-  #         path: memories/{memoryId}/attachment
-  #         authorizer: Auth
-  #         cors: true
-  #   iamRoleStatements:
-  #     - Effect: Allow
-  #       Action:
-  #         - s3:PutObject
-  #         - s3:GetObject
-  #       Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
+  GenerateUploadUrl:
+    handler: src/lambda/http/generateUploadUrl.handler
+    events:
+      - http:
+          method: post
+          path: memories/{memoryId}/attachment
+          authorizer: Auth
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - s3:PutObject
+          - s3:GetObject
+        Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
 
 resources:
   Resources:
@@ -200,6 +200,6 @@ resources:
               Effect: Allow
               Principal: '*'
               Action: 's3:GetObject'
-              Resource: 'arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*'
+              Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
         Bucket: 
           Ref: MemoryBucket
