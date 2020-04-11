@@ -7,7 +7,6 @@ import 'react-calendar/dist/Calendar.css';
 
 import {
   Button,
-  Checkbox,
   Divider,
   Grid,
   Header,
@@ -31,6 +30,7 @@ interface MemoriesState {
   newMemoryName: string
   date: Date
   loadingMemories: boolean
+  imageError: boolean
 }
 
 export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> {
@@ -38,7 +38,8 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
     memories: [],
     newMemoryName: '',
     date: new Date(),
-    loadingMemories: true
+    loadingMemories: true,
+    imageError: false
   }
 
   handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -184,6 +185,12 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
     )
   }
 
+  fallback() {
+    this.setState({
+      imageError: true
+    })
+  }
+
   renderMemoriesList() {
     return (
       <Grid padded>
@@ -196,13 +203,13 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
                   checked={memory.done}
                 />
               </Grid.Column> */}
-              <Grid.Column width={10} verticalAlign="middle">
+              <Grid.Column width={12} verticalAlign="middle">
                 {memory.name}
               </Grid.Column>
               {/* <Grid.Column width={3} floated="right">
                 {memory.dueDate}
               </Grid.Column> */}
-              <Grid.Column width={1} floated="right">
+              <Grid.Column width={2} floated="right">
                 <Button
                   icon
                   color="blue"
@@ -211,7 +218,7 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
                   <Icon name="pencil" />
                 </Button>
               </Grid.Column>
-              <Grid.Column width={1} floated="right">
+              <Grid.Column width={2} floated="right">
                 <Button
                   icon
                   color="red"
@@ -220,9 +227,11 @@ export class Memories extends React.PureComponent<MemoriesProps, MemoriesState> 
                   <Icon name="delete" />
                 </Button>
               </Grid.Column>
-              {memory.attachmentUrl && (
-                <Image src={memory.attachmentUrl} size="small" wrapped />
-              )}
+              {this.state.imageError ? false:
+                memory.attachmentUrl && (
+                  <Image src={memory.attachmentUrl} onError={this.fallback()} size="small" wrapped />
+                ) && this.setState({imageError: false})
+              }
               <Grid.Column width={16}>
                 <Divider />
               </Grid.Column>
